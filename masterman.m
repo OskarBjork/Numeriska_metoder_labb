@@ -46,7 +46,7 @@ end
 %dvdt = quartercar(0,[10;20;30;40])
 
 % Startvärden (vila) och tidsintervall
-v0 = [0; 0;0; 0]; % [z1; z2; z1_dot; z2_dot] [cite: 73]
+v0 = [0;0;0;0]; % [z1; z2; z1_dot; z2_dot] [cite: 73]
 T_end = 10; % Välj en tid lång nog för att se svängningarna klinga av [cite: 74]
 
 dt = 5e-3;
@@ -63,3 +63,4 @@ for k = 1:n_steps-1;
     v_eu(:, k+1) = v_eu(:, k) + dt * dvdt;
 end
 v_eu
+plot(t_eu,v_eu(2,:),'o-')

@@ -51,15 +51,14 @@ options = odeset("RelTol", 1e-6, 'Refine',1, 'InitialStep',0.001)
 t
 v_m = [max(v(:,1)), max(v(:,2))]
 
-v0 = [0;0;0;0]; % [z1; z2; z1_dot; z2_dot] [cite: 73]
-T_end = 10; % Välj en tid lång nog för att se svängningarna klinga av [cite: 74]
+v0 = [0;0;0;0];
+T_end = 10;
 
 %dt = 5e-3;
 dt = .1*c
 t_eu = 0:dt:T_end;
 n_steps = length(t_eu);
 
-% Allokera minne
 v_eu = zeros(4, n_steps);
 v_eu(:, 1) = v0;
 

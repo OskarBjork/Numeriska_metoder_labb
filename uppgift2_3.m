@@ -44,7 +44,7 @@ v0 = [0 0 0 0]
 options = odeset("RelTol", 1e-6, 'Refine',1, 'InitialStep',0.001)
 
 [t,v] = ode45(@quartercar,tspan,v0, options)
-%plot(t,v(:,1),'o-')
+% plot(t,v(:,1),'o-')
 %plot(t,v(:,1),'o-',t,v(:,2),'-o')
 %plot(t,v(:,1),'o-',t,v(:,2),'-o',t,v(:,3),'o-',t,v(:,4),'-o',LineWidth=.1)
 
@@ -67,8 +67,9 @@ for k = 1:n_steps-1;
     dvdt = quartercar(t_eu(k), v_eu(:, k));
     v_eu(:, k+1) = v_eu(:, k) + dt * dvdt;
 end
-v_eu
-%plot(t_eu,v_eu(2,:),'o-',t,v(:,2),'o-',)
-plot(t_eu,v_eu(2,:),'o-',t_eu,v_eu(1,:),'o-')
-legend('z2','z1')
+% v_eu
+plot(t_eu,v_eu(2,:),'o-',t,v(:,2),'o-')
+legend('z2 euler','z2 ode45')
+%plot(t_eu,v_eu(2,:),'o-',t_eu,v_eu(1,:),'o-')
+%legend('z2','z1')
 

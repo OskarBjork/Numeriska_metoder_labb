@@ -9,6 +9,7 @@ function main()
     iter = 0; maxiter = 10000;
     diffx = norm(F);
     while diffx > tol && iter < maxiter
+        
         iter = iter + 1;
         J = Jacobian_transfer_functions(x(1), x(2));
         inv_J = inv(J);

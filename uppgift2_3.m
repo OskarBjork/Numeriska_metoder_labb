@@ -6,9 +6,9 @@ function dvdt = quartercar(t, v_state)
  
     m1 = 475;
     m2 = 53;
-    k1 = 5400*0+690;
+    k1 = 5400+0*690;
     k2_ref = 135000;
-    k2 = 100*k2_ref*0 + 182120;
+    k2 = 100*k2_ref + 0*182120;
     c1 = 310;
     c2 = 1200;
     vel = 65/3.6; 
@@ -68,7 +68,7 @@ for k = 1:n_steps-1;
     v_eu(:, k+1) = v_eu(:, k) + dt * dvdt;
 end
 % v_eu
-plot(t_eu,v_eu(2,:),'o-',t,v(:,2),'o-')
+plot(t_eu,v_eu(1,:),'o-',t,v(:,1),'o-')
 legend('z2 euler','z2 ode45')
 %plot(t_eu,v_eu(2,:),'o-',t_eu,v_eu(1,:),'o-')
 %legend('z2','z1')

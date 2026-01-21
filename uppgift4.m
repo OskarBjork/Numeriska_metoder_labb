@@ -12,36 +12,36 @@ function trapezoid2()
     v0 = [0;0;0;0];
     T_end = 0.05; 
 
-    opts_ref = odeset('RelTol', 1e-10, 'AbsTol', 1e-11);
+    opts_ref = odeset('RelTol', 1e-9, 'AbsTol', 1e-9);
     ode_fun = @(t, v) system_dynamics_explicit(t, v, A, p);
     [t_ref, y_ref] = ode45(ode_fun, [0 T_end], v0, opts_ref);
     
-    dt0 = 1e-4; 
+    dt0 = 1e-3; 
     alphas = [1, 0.5, 0.25, 0.125];
     errors = zeros(size(alphas));
 
-    [t,v] = trapezoidal_solver(A, p, v0, dt0, T_end);
+    % [t,v] = trapezoidal_solver(A, p, v0, dt0, T_end);
 
-    plot(t,v(2,:))
+    % plot(t,v(2,:))
     
-    % fprintf('\n--- Uppgift 4b: Noggranhet trapetsmetoden ---\n');
-    % for i = 1:length(alphas)
-    %     dt = dt0 * alphas(i);
-    %     [t_trap, y_trap] = trapezoidal_solver(A, p, v0, dt, T_end);
+    fprintf('\n--- Uppgift 4b: Noggranhet trapetsmetoden ---\n');
+    for i = 1:length(alphas)
+        dt = dt0 * alphas(i);
+        [t_trap, y_trap] = trapezoidal_solver(A, p, v0, dt, T_end);
         
-    %     % Beräkna fel (jämfört med referens vid sluttidpunkten)
-    %     % Interpolera referenslösning till sluttidpunkten exakt
-    %     v_ref_end = interp1(t_ref, y_ref, T_end, 'spline');
-    %     v_trap_end = y_trap(:,end)';
+        % Beräkna fel (jämfört med referens vid sluttidpunkten)
+        % Interpolera referenslösning till sluttidpunkten exakt
+        v_ref_end = interp1(t_ref, y_ref, T_end, 'spline');
+        v_trap_end = y_trap(:,end)';
         
-    %     % Felnorm (max absolut fel i z2)
-    %     errors(i) = abs(v_trap_end(2) - v_ref_end(2));
+        % Felnorm (max absolut fel i z2)
+        errors(i) = abs(v_trap_end(2) - v_ref_end(2));
         
-    %     fprintf('dt = %.2e s, Fel = %.4e\n', dt, errors(i));
-    % end
+        fprintf('dt = %.2e s, Fel = %.4e\n', dt, errors(i));
+    end
     
-    % slopes = diff(log(errors))./ diff(log(dt0 * alphas));
-    % fprintf('Estimerad noggranhetssordning: %.2f\n', mean(slopes));
+    slopes = diff(log(errors))./ diff(log(dt0 * alphas));
+    fprintf('Estimerad noggranhetssordning: %.2f\n', mean(slopes));
 end
 
 function [t, y] = trapezoidal_solver(A, p, v0, dt, T_end)

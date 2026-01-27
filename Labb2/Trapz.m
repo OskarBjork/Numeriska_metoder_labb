@@ -59,3 +59,6 @@ function val = my_trapz(x, N)
     T = sum(y) - 0.5*y(1) - 0.5*y(end);
     val = h * T;
 end
+
+
+% Felet minskar igen ty andra derivatan är liten för stora x

@@ -44,6 +44,7 @@ function MKV()
 
     fprintf('\nUppgift 1c - Periodisk modell (L=%d):\n', L_guess);
     fprintf('E = %.4e\n', E_per);
+    d
     
     %Uppgift 1d
     p = [d; L_guess]; 
@@ -75,6 +76,7 @@ function MKV()
     fprintf('\nUppgift 1d Gauss-Newton:\n');
     fprintf('Optimerat L = %.4f\n', p(5));
     fprintf('Medelkvadratfel E = %.4e\n', E_gn);
+    p
     
     figure(2);
     plot(t, X, 'k.', t, f_lin, 'b--', t, f_per, 'g--', t, f_gn, 'r-', 'LineWidth', 1.5);
@@ -85,6 +87,8 @@ function MKV()
     E_lin, E_per, E_gn    
 end
 
+% linjär modell minskade 0,001715
+% Gauss-Newton hade minsta felet 
 
 
 

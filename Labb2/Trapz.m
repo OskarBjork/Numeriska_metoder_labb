@@ -46,9 +46,15 @@ function TrapzMain()
 
     % --- Uppgift 4b: Fel vs x (Fixed N) ---
     N_fixed = [50, 120, 400];
-    x_range = linspace(0.1, 6, 100);
+    x_range = linspace(0, 6, 100);
     
     figure(6); clf;
+
+    % Sätt y-axeln att visa mellan 10^-16 och strax över 10^-5
+    ylim([1e-16, 5e-5]); 
+
+    % (Valfritt) Sätt x-axeln exakt mellan 0 och 6
+    % xlim([0, 6]);
     for N = N_fixed
         errors_x = [];
         for x = x_range

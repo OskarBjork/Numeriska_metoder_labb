@@ -83,7 +83,6 @@ function MKV()
     figure(3);
     plot(t, resid_per, t, resid_gn); title('test');
     E_lin, E_per, E_gn    
-    
 end
 
 

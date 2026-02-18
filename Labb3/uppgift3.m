@@ -1,0 +1,52 @@
+% Skapande av referenslösning med ode45 (adaptiv Runge-Kutta)
+options = odeset('RelTol', 1e-12, 'AbsTol', 1e-12);
+[~, y_ref] = ode45(@(t,y) f(y), [0 t_end], y0, options);
+y_true = y_ref(end, :)'; % Den "sanna" lösningsvektorn vid t=100
+
+% Parametervektor för konvergensstudie
+h_vals = [0.1, 0.05, 0.025, 0.0125];
+err_se = zeros(size(h_vals));
+err_mp = zeros(size(h_vals));
+time_se = zeros(size(h_vals));
+time_mp = zeros(size(h_vals));
+
+for i = 1:length(h_vals)
+    h = h_vals(i);
+    N = round(t_end/h);
+    
+    % Test av Symplektisk Euler
+    tic;
+    y = y0;
+    for n = 1:N
+        % p uppdateras explicit från q
+        p_next = y(3:4) - h * (y(1:2) / norm(y(1:2))^3);
+        % q uppdateras explicit från det nya p
+        y(1:2) = y(1:2) + h * p_next;
+        y(3:4) = p_next;
+    end
+    time_se(i) = toc;
+    err_se(i) = norm(y - y_true); % Euklidiskt avstånd (L2-norm)
+    
+    % Test av Implicit Mittpunktsmetod
+    tic;
+    y = y0;
+    for n = 1:N
+        yg = y + h * f(y); % Initialgissning med framåt Euler
+        % Newton-Raphson iteration
+        for iter = 1:7
+            ym = 0.5 * (y + yg); % Mittpunkt
+            J = eye(4) - 0.5 * h * Jf(ym); % Analytisk Jacobian
+            F_val = yg - y - h * f(ym);
+            delta = J \ F_val;
+            yg = yg - delta;
+            if norm(delta) < 1e-8, break; end
+        end
+        y = yg;
+    end
+    time_mp(i) = toc;
+    err_mp(i) = norm(y - y_true);
+end
+
+% Beräkning av den empiriska konvergensordningen
+ord_se = log2(err_se(1:end-1)./ err_se(2:end));
+ord_mp = log2(err_mp(1:end-1)./ err_mp(2:end));

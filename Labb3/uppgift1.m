@@ -23,10 +23,11 @@ y_mp = zeros(4, N_mid+1);   y_mp(:,1) = y0; % Mittpunktsmetoden
 
 % Definition av det första ordningens vektorfält f(y)
 % norm(y(1:2)) beräknar |q| = sqrt(q1^2 + q2^2)
-f = @(y) [y(3); 
-          y(4); 
-          -y(1)/norm(y(1:2))^3; 
-          -y(2)/norm(y(1:2))^3];
+% y = (q1,q2,p1,p2) = (q1,q2, q1_p, q2_p)
+f = @(y) [y(3); % p1 = q1_p
+          y(4); % p2 = q2_p
+          -y(1)/norm(y(1:2))^3; % p1_p
+          -y(2)/norm(y(1:2))^3]; % p2_p
 
 % Definition av Hamiltonfunktionen H(p,q) för beräkning av energi
 energy = @(y) 0.5*(y(3)^2 + y(4)^2) - 1/norm(y(1:2));
@@ -56,7 +57,7 @@ for n = 1:N_euler
     y_se(:, n+1) = [q_next; p_next];
     
     % 3. Bakåt Euler (Implicit)
-    % Använder Newton-Raphson för att hitta roten till F(y^{n+1}) = 0
+    % Använder Newtons metod för att hitta roten till F(y^{n+1}) = 0
     y_guess = y_be(:, n) + h_euler * f(y_be(:, n)); % Explicit Euler som startgissning
     for iter = 1:10
         % Beräkna residualen F

@@ -1,4 +1,20 @@
 % Skapande av referenslösning med ode45 (adaptiv Runge-Kutta)
+
+% Fysikaliska och numeriska parametrar
+a = 0.5; % Excentricitet som styr banans form
+t_end = 100; % Total simuleringstid
+% Begynnelsevillkor: q1, q2, p1, p2 (kroppen befinner sig vid perihelium)
+y0 = [1-a; 0; 0; sqrt((1+a)/(1-a))];
+
+f = @(y) [y(3); % p1 = q1_p
+          y(4); % p2 = q2_p
+          -y(1)/norm(y(1:2))^3; % p1_p
+          -y(2)/norm(y(1:2))^3]; % p2_p
+
+Jf = @(y) [0, 0, 1, 0; 
+           0, 0, 0, 1; 
+           (2*y(1)^2 - y(2)^2)/norm(y(1:2))^5, 3*y(1)*y(2)/norm(y(1:2))^5, 0, 0; 
+           3*y(1)*y(2)/norm(y(1:2))^5, (2*y(2)^2 - y(1)^2)/norm(y(1:2))^5, 0, 0];
 options = odeset('RelTol', 1e-12, 'AbsTol', 1e-12);
 [~, y_ref] = ode45(@(t,y) f(y), [0 t_end], y0, options);
 y_true = y_ref(end, :)'; % Den "sanna" lösningsvektorn vid t=100
@@ -32,7 +48,7 @@ for i = 1:length(h_vals)
     y = y0;
     for n = 1:N
         yg = y + h * f(y); % Initialgissning med framåt Euler
-        % Newton-Raphson iteration
+        % Newton iteration
         for iter = 1:7
             ym = 0.5 * (y + yg); % Mittpunkt
             J = eye(4) - 0.5 * h * Jf(ym); % Analytisk Jacobian
@@ -46,6 +62,9 @@ for i = 1:length(h_vals)
     time_mp(i) = toc;
     err_mp(i) = norm(y - y_true);
 end
+
+err_se;
+err_mp;
 
 % Beräkning av den empiriska konvergensordningen
 ord_se = log2(err_se(1:end-1)./ err_se(2:end));

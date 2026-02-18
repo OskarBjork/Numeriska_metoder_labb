@@ -15,14 +15,19 @@ Jf = @(y) [0, 0, 1, 0;
            0, 0, 0, 1; 
            (2*y(1)^2 - y(2)^2)/norm(y(1:2))^5, 3*y(1)*y(2)/norm(y(1:2))^5, 0, 0; 
            3*y(1)*y(2)/norm(y(1:2))^5, (2*y(2)^2 - y(1)^2)/norm(y(1:2))^5, 0, 0];
+energy = @(y) 0.5*(y(3)^2 + y(4)^2) - 1/norm(y(1:2));
 options = odeset('RelTol', 1e-12, 'AbsTol', 1e-12);
+tic;
 [~, y_ref] = ode45(@(t,y) f(y), [0 t_end], y0, options);
+time_ode45 = toc;
 y_true = y_ref(end, :)'; % Den "sanna" lösningsvektorn vid t=100
 
 % Parametervektor för konvergensstudie
 h_vals = [0.1, 0.05, 0.025, 0.0125];
-err_se = zeros(size(h_vals));
-err_mp = zeros(size(h_vals));
+err_se_y = zeros(size(h_vals));
+err_se_energy = zeros(size(h_vals));
+err_mp_y = zeros(size(h_vals));
+err_mp_energy = zeros(size(h_vals));
 time_se = zeros(size(h_vals));
 time_mp = zeros(size(h_vals));
 
@@ -41,7 +46,8 @@ for i = 1:length(h_vals)
         y(3:4) = p_next;
     end
     time_se(i) = toc;
-    err_se(i) = norm(y - y_true); % Euklidiskt avstånd (L2-norm)
+    err_se_y(i) = norm(y - y_true); % Euklidiskt avstånd (L2-norm)
+    err_se_energy(i) = norm(energy(y)- energy(y_true));
     
     % Test av Implicit Mittpunktsmetod
     tic;
@@ -60,12 +66,20 @@ for i = 1:length(h_vals)
         y = yg;
     end
     time_mp(i) = toc;
-    err_mp(i) = norm(y - y_true);
+    err_mp_y(i) = norm(y - y_true);
+    err_mp_energy(i) = norm(energy(y)-energy(y_true));
 end
 
-err_se;
-err_mp;
+err_se_y;
+err_mp_y;
+err_se_energy;
+err_mp_energy;
+
+time_se
+time_mp
+time_ode45
+
 
 % Beräkning av den empiriska konvergensordningen
-ord_se = log2(err_se(1:end-1)./ err_se(2:end));
-ord_mp = log2(err_mp(1:end-1)./ err_mp(2:end));
+ord_se = log2(err_se_y(1:end-1)./ err_se_y(2:end));
+ord_mp = log2(err_mp_y(1:end-1)./ err_mp_y(2:end));

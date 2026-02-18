@@ -1,0 +1,3 @@
+
+% Energin ökar med framåt Euler, minskar med Bakåt euler, och är i princip konstant med resterande metoder.
+% Symplektisk euler är snabbare men mindre noggran.

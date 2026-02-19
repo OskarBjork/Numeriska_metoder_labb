@@ -49,3 +49,5 @@ end
 figure('Name', 'Energins tidsutveckling');
 t_vec = linspace(0, T, M+1);
 plot(t_vec, E, 'k', 'LineWidth', 1.5);
+xlabel('Tid t');
+ylabel('Energi E');

@@ -20,7 +20,7 @@ u(:,1) = g(x);
 p(:,1) = zeros(N-1, 1); 
 
 E = zeros(1, M+1);
-E(1) = 0.5 * norm(p(:,1))^2 - 0.5 * c^2 * dx * (u(:,1)' * (A * u(:,1)));
+E(1) = 0.5 * norm(p(:,1))^2 - 0.5 * c^2 * (u(:,1)' * A * u(:,1));
 
 figure('Name', 'Vågpropagering (Dirichlet)');
 X_full = [0; x; 1]; 
@@ -39,7 +39,7 @@ for m = 1:M
     
     u(:,m+1) = u(:,m) + dt * p(:,m+1);
     
-    E(m+1) = 0.5 * norm(p(:,m+1))^2 - 0.5 * c^2 * dx * (u(:,m+1)' * (A * u(:,m+1)));
+    E(m+1) = 0.5 * norm(p(:,m+1))^2 - 0.5 * c^2 * (u(:,m+1)' * A * u(:,m+1));
     
     U_full = [0; u(:,m+1); 0];
     set(hPlot, 'YData', U_full);

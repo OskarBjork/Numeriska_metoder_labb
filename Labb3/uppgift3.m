@@ -1,5 +1,4 @@
 % Skapande av referenslösning med ode45 (adaptiv Runge-Kutta)
-
 % Fysikaliska och numeriska parametrar
 a = 0.5; % Excentricitet som styr banans form
 t_end = 100; % Total simuleringstid
@@ -23,7 +22,7 @@ time_ode45 = toc;
 y_true = y_ref(end, :)'; % Den "sanna" lösningsvektorn vid t=100
 
 % Parametervektor för konvergensstudie
-h_vals = [0.1, 0.05, 0.025, 0.0125];
+h_vals = [1/250 1/500 1/1000 1/2000 1/4000 1/8000 1/16000];
 err_se_y = zeros(size(h_vals));
 err_se_energy = zeros(size(h_vals));
 err_mp_y = zeros(size(h_vals));
@@ -75,11 +74,15 @@ err_mp_y;
 err_se_energy;
 err_mp_energy;
 
-time_se
-time_mp
-time_ode45
+time_se;
+time_mp;
+time_ode45;
+
 
 
 % Beräkning av den empiriska konvergensordningen
 ord_se = log2(err_se_y(1:end-1)./ err_se_y(2:end));
 ord_mp = log2(err_mp_y(1:end-1)./ err_mp_y(2:end));
+
+eff_SE = 1 ./ (time_se .* err_se_y)
+eff_IM = 1 ./ (time_mp .* err_mp_y)
